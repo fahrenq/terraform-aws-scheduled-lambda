@@ -1,8 +1,8 @@
-variable "function_names" {
+variable "functions_names" {
   type = "list"
 }
 
-variable "function_count" {}
+variable "functions_count" {}
 
 variable "name" {}
 
