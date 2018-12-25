@@ -9,8 +9,8 @@ variable "name" {}
 variable "schedule_expression" {}
 
 data "aws_lambda_function" "main" {
-  count         = "${var.function_count}"
-  function_name = "${element(var.function_names, count.index)}"
+  count         = "${var.functions_count}"
+  function_name = "${element(var.functions_names, count.index)}"
   qualifier     = ""
 }
 
@@ -20,13 +20,13 @@ resource "aws_cloudwatch_event_rule" "main" {
 }
 
 resource "aws_cloudwatch_event_target" "main" {
-  count = "${var.function_count}"
+  count = "${var.functions_count}"
   rule  = "${aws_cloudwatch_event_rule.main.name}"
   arn   = "${element(data.aws_lambda_function.main.*.arn, count.index)}"
 }
 
 resource "aws_lambda_permission" "main" {
-  count         = "${var.function_count}"
+  count         = "${var.functions_count}"
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = "${element(data.aws_lambda_function.main.*.function_name, count.index)}"
